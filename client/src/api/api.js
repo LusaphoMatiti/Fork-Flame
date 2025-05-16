@@ -22,18 +22,21 @@ export const getBookings = async () => {
 
 export const createBooking = async (data) => {
   try {
-    const mappedData = {
-      customer_name: data.name,
-      booking_date: data.date,
-      booking_time: data.time,
-      guests: data.guests,
-    };
+    // Format date to YYYY-MM-DD
+    const formattedDate = new Date(data.date).toISOString().split("T")[0];
 
-    const response = await api.post("/bookings", mappedData);
+    const response = await api.post("/bookings", {
+      customer_name: data.name,
+      booking_date: formattedDate,
+      booking_time: data.time,
+      guests: Number(data.guests),
+    });
+
     return response.data;
   } catch (error) {
-    console.error("Error creating bookings:", error);
-    throw error;
+    const errorMsg = error.response?.data?.message || error.message;
+    console.error("Booking failed:", errorMsg);
+    throw new Error(errorMsg);
   }
 };
 

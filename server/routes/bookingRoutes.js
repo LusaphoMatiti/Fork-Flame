@@ -5,31 +5,32 @@ const router = express.Router();
 
 // Create a booking
 router.post("/", async (req, res) => {
-  console.log("Incoming booking data:", req.body);
   const { customer_name, booking_date, booking_time, guests } = req.body;
+
+  // Validation
+  if (!customer_name || !booking_date || !booking_time || !guests) {
+    return res.status(400).json({ message: "All fields are required" });
+  }
 
   try {
     const { data, error } = await supabase
       .from("bookings")
-      .insert([
-        {
-          customer_name,
-          booking_date,
-          booking_time,
-          guests: parseInt(guests),
-        },
-      ])
-      .select(); // returns inserted row(s)
+      .insert({
+        customer_name,
+        booking_date: new Date(booking_date).toISOString(), // Ensure proper date format
+        booking_time,
+        guests: parseInt(guests),
+      })
+      .select();
 
-    if (error) {
-      console.error("Booking creation error:", error);
-      return res.status(500).json({ message: "Failed to create booking." });
-    }
+    if (error) throw error;
 
-    res.status(201).json(data[0]);
+    return res.status(201).json(data[0]);
   } catch (err) {
-    console.error("Unexpected error:", err);
-    res.status(500).json({ message: "Unexpected server error." });
+    console.error("Booking error:", err);
+    return res.status(500).json({
+      message: err.message || "Booking failed",
+    });
   }
 });
 
