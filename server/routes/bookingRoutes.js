@@ -8,6 +8,9 @@ router.post("/", async (req, res) => {
 
   const { customer_name, booking_date, booking_time, guests } = req.body;
 
+  // In your route, before the query
+  console.log("Date:", booking_date, "Time:", booking_time);
+
   try {
     const result = await pool.query(
       "INSERT INTO bookings (customer_name,booking_date, booking_time, guests) VALUES ($1, $2, $3, $4) RETURNING *",

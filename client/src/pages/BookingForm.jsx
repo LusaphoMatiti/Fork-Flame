@@ -36,7 +36,12 @@ const BookingForm = () => {
       const result = await createBooking(formData);
       setStatus("Booking Successful");
       console.log("Booking result:", result);
-      setFormData({ guests: 1, name: "", date: "", time: "" });
+      setFormData({
+        guests: 1,
+        name: "",
+        date: "",
+        time: "",
+      });
     } catch (error) {
       console.error("Booking error:", error);
       setStatus("Booking failed. Try again.");
