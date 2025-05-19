@@ -90,6 +90,10 @@ const Navbar = () => {
           Home
         </Link>
 
+        <Link to="/menu" className="hover:text-[#8B5E3C]">
+          Menu
+        </Link>
+
         <Link to="/contact" className="hover:text-[#8B5E3C]">
           Contact
         </Link>

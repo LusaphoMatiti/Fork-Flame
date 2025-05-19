@@ -7,95 +7,166 @@ const api = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
+  timeout: 10000, // 10 seconds timeout
 });
 
-// BOOKINGS
-
-export const getBookings = async () => {
-  try {
-    const response = await api.get("/bookings");
-    return response.data;
-  } catch (error) {
-    console.error("Error getting bookings:", error);
+// Request interceptor for adding auth token if exists
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem("authToken");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
   }
+  return config;
+});
+
+// Response interceptor for error handling
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    const errorMsg =
+      error.response?.data?.message || error.message || "Request failed";
+
+    if (error.response?.status === 401) {
+      // Handle unauthorized access (e.g., redirect to login)
+      console.error("Authentication error:", errorMsg);
+      // Redirect to login here
+    }
+
+    return Promise.reject(errorMsg);
+  }
+);
+
+/**
+ * BOOKINGS API
+ */
+export const bookingsApi = {
+  getAll: async () => {
+    try {
+      const { data } = await api.get("/bookings");
+      return data;
+    } catch (error) {
+      console.error("Error getting bookings:", error);
+      throw error;
+    }
+  },
+
+  create: async (bookingData) => {
+    try {
+      // Validate required fields
+      if (
+        !bookingData?.name ||
+        !bookingData?.date ||
+        !bookingData?.time ||
+        !bookingData?.guests
+      ) {
+        throw new Error("Missing required booking fields");
+      }
+
+      const formattedDate = new Date(bookingData.date)
+        .toISOString()
+        .split("T")[0];
+
+      const { data } = await api.post("/bookings", {
+        customer_name: bookingData.name,
+        booking_date: formattedDate,
+        booking_time: bookingData.time,
+        guests: Number(bookingData.guests),
+        contact_number: bookingData.contactNumber,
+        special_requests: bookingData.specialRequests,
+      });
+
+      return data;
+    } catch (error) {
+      console.error("Booking creation failed:", error);
+      throw error;
+    }
+  },
+
+  getByName: async (name) => {
+    if (!name) throw new Error("Name is required");
+
+    try {
+      const { data } = await api.get(
+        `/bookings/by-name/${encodeURIComponent(name)}`
+      );
+      return data;
+    } catch (error) {
+      console.error("Error getting bookings by name:", error);
+      throw error;
+    }
+  },
+
+  getByDate: async (date) => {
+    if (!date) throw new Error("Date is required");
+
+    try {
+      const { data } = await api.get(`/bookings/by-date/${date}`);
+      return data;
+    } catch (error) {
+      console.error("Error getting bookings by date:", error);
+      throw error;
+    }
+  },
 };
 
-export const createBooking = async (data) => {
-  try {
-    // Format date to YYYY-MM-DD
-    const formattedDate = new Date(data.date).toISOString().split("T")[0];
+/**
+ * CATEGORIES API
+ */
+export const categoriesApi = {
+  getAll: async () => {
+    try {
+      const { data } = await api.get("/categories");
+      return data;
+    } catch (error) {
+      console.error("Error getting categories:", error);
+      throw error;
+    }
+  },
 
-    const response = await api.post("/bookings", {
-      customer_name: data.name,
-      booking_date: formattedDate,
-      booking_time: data.time,
-      guests: Number(data.guests),
-    });
+  create: async (categoryData) => {
+    if (!categoryData?.category_name) {
+      throw new Error("Category name is required");
+    }
 
-    return response.data;
-  } catch (error) {
-    const errorMsg = error.response?.data?.message || error.message;
-    console.error("Booking failed:", errorMsg);
-    throw new Error(errorMsg);
-  }
+    try {
+      const { data } = await api.post("/categories", {
+        category_name: categoryData.category_name.trim(),
+      });
+      return data;
+    } catch (error) {
+      console.error("Error creating category:", error);
+      throw error;
+    }
+  },
 };
 
-export const getBookingsByName = async (name) => {
-  try {
-    const response = await api.get(`/bookings/by-name/${name}`);
-    return response.data;
-  } catch (error) {
-    console.error("Error getting bookings by name:", error);
-  }
-};
+/**
+ * MENU API
+ */
+export const menuApi = {
+  getAll: async () => {
+    try {
+      const { data } = await api.get("/menu");
+      return data;
+    } catch (error) {
+      console.error("Error getting menu items:", error);
+      throw error;
+    }
+  },
 
-export const getBookingsByDate = async (date) => {
-  try {
-    const response = await api.get(`/bookings/by-date/${date}`);
-    return response.data;
-  } catch (error) {
-    console.error("Error getting booking by date:", error);
-  }
-};
+  getByCategory: async (categoryName) => {
+    if (!categoryName) throw new Error("Category name is required");
 
-// CATEGORIES
-
-export const getCategories = async () => {
-  try {
-    const response = await api.get("/categories");
-    return response.data;
-  } catch (error) {
-    console.error("Error getting categories:", error);
-  }
-};
-
-export const createCategory = async (data) => {
-  try {
-    const response = await api.post("/categories", data);
-    return response.data;
-  } catch (error) {
-    console.error("Error creating category data:", error);
-  }
-};
-
-// MENU ITEMS
-
-export const getMenuItems = async () => {
-  try {
-    const response = await api.get("/menu");
-    return response.data;
-  } catch (error) {
-    console.error("Error getting menu:", error);
-  }
-};
-
-export const getMenuByCategory = async (id) => {
-  try {
-    const response = await api.get(`/menu/${id}`);
-    return response.data;
-  } catch (error) {
-    console.error("Error getting customer by id: ", error);
-  }
+    try {
+      const { data } = await api.get(
+        `/menu/category/${encodeURIComponent(categoryName)}`
+      );
+      return data;
+    } catch (error) {
+      console.error("Error getting menu by category:", error);
+      throw error;
+    }
+  },
 };
 
 export default api;
