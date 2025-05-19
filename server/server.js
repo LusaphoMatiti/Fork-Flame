@@ -10,13 +10,25 @@ import morgan from "morgan";
 
 dotenv.config();
 
+const requiredEnvVars = ["FRONTEND_URL"];
+requiredEnvVars.forEach((varName) => {
+  if (!process.env[varName]) {
+    console.error(`Missing required environment variable: ${varName}`);
+    process.exit(1);
+  }
+});
+
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Rate limiting configuration
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
+  windowMs: 15 * 60 * 1000,
+  max: process.env.NODE_ENV === "production" ? 100 : 1000,
+  message: {
+    status: 429,
+    message: "Too many requests, please try again later",
+  },
   standardHeaders: true,
   legacyHeaders: false,
 });
@@ -24,13 +36,31 @@ const limiter = rateLimit({
 // Middleware
 app.use(
   cors({
-    origin: [process.env.FRONTEND_URL, "http://localhost:5173"],
+    origin:
+      process.env.NODE_ENV === "production"
+        ? [process.env.FRONTEND_URL]
+        : [process.env.FRONTEND_URL, "http://localhost:5173"],
     credentials: true,
   })
 );
-app.use(helmet()); // Security headers
+
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", "'unsafe-inline'"],
+        styleSrc: ["'self'", "'unsafe-inline'"],
+        imgSrc: ["'self'", "data:", "https://*.supabase.co"],
+      },
+    },
+  })
+); // Security headers
+
 app.use(limiter); // Apply rate limiting
-app.use(morgan("dev")); // Request logging
+if (process.env.NODE_ENV !== "production") {
+  app.use(morgan("dev"));
+}
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); // For form data parsing
 
@@ -45,6 +75,20 @@ app.get("/api/health", (req, res) => {
     status: "healthy",
     timestamp: new Date().toISOString(),
     uptime: process.uptime(),
+  });
+});
+
+app.get("/", (req, res) => {
+  res.status(200).json({
+    message: "Fork & Flame Restaurant API",
+    status: "operational",
+    documentation: process.env.DOCS_URL || "No docs URL set",
+    routes: {
+      bookings: "/api/bookings",
+      menu: "/api/menu",
+      categories: "/api/categories",
+      health: "/api/health",
+    },
   });
 });
 
