@@ -18,32 +18,24 @@ router.get("/", async (req, res) => {
   }
 });
 
+// In your menuRoutes.js
 router.get("/category/:name", async (req, res) => {
   const { name } = req.params;
 
   try {
-    const { data: categoryData, error: categoryError } = await supabase
-      .from("categories")
-      .select("category_id")
-      .eq("category_name", name)
-      .single();
+    // Decode URI component and replace special encoding
+    const decodedName = decodeURIComponent(name.replace(/\+/g, " "));
 
-    if (categoryError || !categoryData) {
-      return res.status(404).json({ message: "Category not found." });
-    }
-
-    const { data: menuItems, error: menuError } = await supabase
+    const { data: menuItems, error } = await supabase
       .from("menu_items")
-      .select("*")
-      .eq("category_id", categoryData.category_id);
+      .select("*, categories!inner(*)")
+      .ilike("categories.category_name", decodedName);
 
-    if (menuError) {
-      return res.status(500).json({ message: "Error fetching menu items." });
-    }
-
+    if (error) throw error;
     res.json(menuItems);
   } catch (err) {
-    res.status(500).json({ message: "Unexpected server error." });
+    console.error(err);
+    res.status(500).json({ message: "Error fetching category items" });
   }
 });
 

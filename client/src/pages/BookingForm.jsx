@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { createBooking } from "../api/api.js";
+import { bookingsApi } from "../api/api.js";
 
 const BookingForm = () => {
   const [isMobile, setIsMobile] = useState(false);
@@ -33,7 +33,7 @@ const BookingForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const result = await createBooking(formData);
+      const result = await bookingsApi.create(formData);
       setStatus("Booking Successful");
       console.log("Booking result:", result);
       setFormData({

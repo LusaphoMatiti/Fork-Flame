@@ -1,23 +1,27 @@
-import React, { useEffect, useState } from "react";
-import { menuApi } from "../api/api.js"; // Using the improved API service
-import MenuCard from "../components/MenuCard";
-import LoadingSpinner from "../components/LoadingSpinner"; // Suggested new component
+import { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { menuApi } from "../api/api.js";
+import MenuCard from "../components/MenuCard.jsx";
+import LoadingSpinner from "../components/LoadSpinner.jsx";
 
-// Move categories to a config file or get from API
 const CATEGORIES = [
   { id: "all", name: "All" },
   { id: "starters", name: "Starters" },
   { id: "seafood", name: "Seafood" },
-  { id: "meat", name: "Meat & Game" }, // Updated to match your backend
-  { id: "vegetarian", name: "Vegetarian & Vegan" }, // Updated to match your backend
-  { id: "desserts", name: "Desserts" }, // Updated to match your backend
+  { id: "meat", name: "Meat & Game" },
+  { id: "vegetarian", name: "Vegetarian & Vegan" },
+  { id: "desserts", name: "Desserts" },
 ];
 
 const MenuPage = () => {
+  const { categoryId } = useParams(); // Get category from URL
+  const navigate = useNavigate();
   const [menuItems, setMenuItems] = useState([]);
-  const [activeCategory, setActiveCategory] = useState("all");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  // Set active category based on URL or default to "all"
+  const activeCategory = categoryId || "all";
 
   const fetchItems = async (category) => {
     setLoading(true);
@@ -42,9 +46,12 @@ const MenuPage = () => {
     fetchItems(activeCategory);
   }, [activeCategory]);
 
-  const handleFilter = (categoryId) => {
-    setActiveCategory(categoryId);
-    // No need to call fetchItems here - useEffect will handle it
+  const handleCategoryChange = (categoryId) => {
+    if (categoryId === "all") {
+      navigate("/menu"); // Navigate to base menu route for "All"
+    } else {
+      navigate(`/menu/category/${categoryId}`);
+    }
   };
 
   return (
@@ -63,7 +70,7 @@ const MenuPage = () => {
           {CATEGORIES.map((category) => (
             <button
               key={category.id}
-              onClick={() => handleFilter(category.id)}
+              onClick={() => handleCategoryChange(category.id)}
               className={`px-4 py-2 rounded-full border-2 font-medium transition-colors duration-200 ${
                 activeCategory === category.id
                   ? "bg-black text-white border-black"
@@ -95,10 +102,7 @@ const MenuPage = () => {
           ) : menuItems.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {menuItems.map((item) => (
-                <MenuCard
-                  key={item.item_id} // Using the actual ID from your data
-                  item={item}
-                />
+                <MenuCard key={item.item_id} item={item} />
               ))}
             </div>
           ) : (

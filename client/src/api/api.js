@@ -155,15 +155,13 @@ export const menuApi = {
   },
 
   getByCategory: async (categoryName) => {
-    if (!categoryName) throw new Error("Category name is required");
-
     try {
       const { data } = await api.get(
-        `/menu/category/${encodeURIComponent(categoryName)}`
+        `/menu/category/${encodeURIComponent(categoryName.toLowerCase())}`
       );
       return data;
     } catch (error) {
-      console.error("Error getting menu by category:", error);
+      console.error("API Error:", error);
       throw error;
     }
   },

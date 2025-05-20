@@ -1,12 +1,12 @@
 import { Router, Routes, Route } from "react-router-dom";
-import Navbar from "./components/Navbar";
-import Hero from "./pages/Hero";
-import MenuTeaser from "./pages/MenuTeaser";
-import Experience from "./pages/Experience";
-import Footer from "./components/Footer";
-import Contact from "./pages/Contact";
-import Menu from "./pages/Menu";
-import CategoryPage from "./components/CategoryPage";
+import Navbar from "./components/Navbar.jsx";
+import Hero from "./pages/Hero.jsx";
+import MenuTeaser from "./pages/MenuTeaser.jsx";
+import Experience from "./pages/Experience.jsx";
+import Footer from "./components/Footer.jsx";
+import Contact from "./pages/Contact.jsx";
+import Menu from "./pages/Menu.jsx";
+import CategoryPage from "./components/CategoryPage.jsx";
 
 function App() {
   return (
@@ -25,7 +25,7 @@ function App() {
           }
         />
         <Route path="/menu" element={<Menu />} />
-        <Route path="/menu/category/:name" element={<CategoryPage />} />
+        <Route path="/menu/category/:categoryId" element={<CategoryPage />} />
       </Routes>
       <Footer />
     </>
