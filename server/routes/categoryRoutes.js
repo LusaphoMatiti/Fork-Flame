@@ -23,28 +23,6 @@ router.get("/", async (req, res) => {
   }
 });
 
-// GET category by ID
-
-router.get("/:id", async (req, res) => {
-  const { id } = req.params;
-  try {
-    const result = await pool.query("SELECT * FROM categories WHERE id = $1", [
-      id,
-    ]);
-    if (result.rows.length === 0) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Category not found" });
-    }
-    res.status(200).json({ success: true, data: result.rows[0] });
-  } catch (error) {
-    console.error(`GET /categories/${id} error:`, error.message);
-    res
-      .status(500)
-      .json({ success: false, message: "Failed to fetch category" });
-  }
-});
-
 // GET category by name
 router.get("/by-name/:category_name", async (req, res) => {
   const { category_name } = req.params;
@@ -83,23 +61,6 @@ router.get("/by-name/:category_name", async (req, res) => {
       message: "Failed to fetch category",
       error: process.env.NODE_ENV === "development" ? error.message : undefined,
     });
-  }
-});
-
-app.get("/api/menu/category/:category", async (req, res) => {
-  const category = req.params.category.toLowerCase(); // already URL-friendly
-
-  try {
-    const items = await Menu.find({ category }); // assumes exact match
-    if (!items.length) {
-      return res
-        .status(404)
-        .json({ message: "No items found in this category" });
-    }
-    res.json(items);
-  } catch (error) {
-    console.error("Error fetching category:", error);
-    res.status(500).json({ message: "Server error" });
   }
 });
 
