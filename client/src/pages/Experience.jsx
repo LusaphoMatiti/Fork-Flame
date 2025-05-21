@@ -10,7 +10,7 @@ const Experience = () => {
         <source src="/experience.mp4" type="video/mp4" />
       </video>
       {/* Overlay */}
-      <div className="absolute inset-0 bg-black opacity-60 z-10"></div>
+      <div className="absolute inset-0 bg-black opacity-35 z-10"></div>
       {/* Content */}
       <div className="relative z-20 flex flex-col items-center justify-center h-full text-white px-6 text-center">
         <h1 className="text-3xl sm:text-4xl md:text-6xl font-semibold font-playfair mb-5">

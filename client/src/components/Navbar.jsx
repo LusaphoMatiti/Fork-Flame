@@ -85,18 +85,18 @@ const Navbar = () => {
       </div>
 
       {/* Navigation Links (Desktop) */}
-      <div className="hidden md:flex space-x-[2rem] text-[16px] sm:text-[14px] font-[400] ">
-        <Link to="/" className="hover:text-[#8B5E3C]">
+      <div className="hidden md:flex space-x-[2rem] text-[16px] sm:text-[14px]  font-semibold md:text-md">
+        <a href="/home" className="hover:text-[#8B5E3C] cursor-pointer">
           Home
-        </Link>
+        </a>
 
-        <Link to="/menu" className="hover:text-[#8B5E3C]">
+        <a href="/menu" className="hover:text-[#8B5E3C] cursor-pointer">
           Menu
-        </Link>
+        </a>
 
-        <Link to="/contact" className="hover:text-[#8B5E3C]">
+        <a className="hover:text-[#8B5E3C] cursor-pointer " href="/contact">
           Contact
-        </Link>
+        </a>
       </div>
 
       {/* Actions (Login / Signup) */}
@@ -125,13 +125,13 @@ const Navbar = () => {
           <>
             <button
               onClick={handleOAuthLogin}
-              className="text-[16px] font-[500]"
+              className="text-[16px] font-[500] cursor-pointer"
             >
               Login
             </button>
             <button
               onClick={handleOAuthLogin}
-              className="bg-[#D9A05B] hover:bg-[#e7be8c] text-[#1A1A1A] rounded-[8px] px-[1.25rem] py-[0.5rem] text-[16px] font-[500]"
+              className="bg-[#D9A05B] hover:bg-[#e7be8c] text-[#1A1A1A] rounded-[8px] px-[1.25rem] py-[0.5rem] text-[16px] font-[500] cursor-pointer"
             >
               Sign Up
             </button>
@@ -181,7 +181,7 @@ const Navbar = () => {
       </div>
       {/* Menu Links */}
       <div
-        className={`md:hidden absolute inset-x-0 z-20 w-full px-6 py-2 bg-white top-24 dark:bg-gray-800 md:mt-0 md:p-0 md:top-0 md:relative md:bg-transparent md:w-auto md:items-center transition-all duration-300 ease-in-out ${
+        className={`md:hidden absolute inset-x-0 z-20 w-full px-6 py-2 bg-white  dark:bg-gray-800 top-[80px] md:mt-0 md:p-0 md:top-0 md:relative md:bg-transparent md:w-auto md:items-center transition-all duration-300 ease-in-out ${
           isOpen
             ? "translate-x-0 opacity-100"
             : "opacity-0 -translate-x-full md:opacity-100 md:translate-x-0"
@@ -189,15 +189,21 @@ const Navbar = () => {
       >
         <div className="flex flex-col md:flex-row md:items-center md:space-x-2">
           <button
-            href="/"
-            className="my-2 text-sm py-2 w-[15vh] leading-5 text-gray-700 transition duration-300 transform dark:text-gray-200 hover:text-[#D9A05B] cursor-pointer dark:hover:text-blue-400 hover:underline md:my-0 "
+            onClick={() => navigate("/home")}
+            className="my-2 text-sm py-2 w-[15vh] leading-5 text-gray-700 transition duration-300 transform dark:text-gray-200 hover:text-[#D9A05B] cursor-pointer hover:bg-gray-300 rounded-lg md:my-0 "
           >
             Home
           </button>
+          <button
+            onClick={() => navigate("/menu")}
+            className="my-2 text-sm py-2 w-[15vh] leading-5 text-gray-700 transition duration-300 transform dark:text-gray-200 hover:text-[#D9A05B] cursor-pointer hover:bg-gray-300 rounded-lg  md:my-0"
+          >
+            Menu
+          </button>
 
           <button
-            href="/"
-            className="my-2 text-sm py-2 w-[15vh] leading-5 text-gray-700 transition duration-300 transform dark:text-gray-200 hover:text-[#D9A05B] cursor-pointer hover:underline md:my-0"
+            onClick={() => navigate("/contact")}
+            className="my-2 text-sm py-2 w-[15vh] leading-5 text-gray-700 transition duration-300 transform dark:text-gray-200 hover:text-[#D9A05B] cursor-pointer hover:bg-gray-300 rounded-lg  md:my-0"
           >
             Contact
           </button>

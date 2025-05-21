@@ -1,27 +1,54 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { menuApi } from "../api/api.js";
-import MenuCard from "../components/MenuCard.jsx";
-import LoadingSpinner from "../components/LoadSpinner.jsx";
+import { menuApi } from "../api/api";
+import MenuCard from "../components/MenuCard";
+import LoadingSpinner from "../components/LoadSpinner";
 
 const CATEGORIES = [
   { id: "all", name: "All" },
   { id: "starters", name: "Starters" },
   { id: "seafood", name: "Seafood" },
-  { id: "meat", name: "Meat & Game" },
-  { id: "vegetarian", name: "Vegetarian & Vegan" },
+  { id: "meat-and-game", name: "Meat & Game" },
+  { id: "vegetarian-and-vegan", name: "Vegetarian & Vegan" },
   { id: "desserts", name: "Desserts" },
 ];
 
 const MenuPage = () => {
-  const { categoryId } = useParams(); // Get category from URL
+  const { categoryId } = useParams();
   const navigate = useNavigate();
   const [menuItems, setMenuItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [activeTags, setActiveTags] = useState([]);
 
-  // Set active category based on URL or default to "all"
   const activeCategory = categoryId || "all";
+
+  // Process menu items and extract unique dietary tags
+  const processMenuItems = (items) => {
+    const allTags = new Set();
+    const processedItems = items.map((item) => {
+      // Ensure dietary_tags is always an array
+      const tags = Array.isArray(item.dietary_tags)
+        ? item.dietary_tags
+        : item.dietary_tags
+        ? [item.dietary_tags]
+        : [];
+
+      // Add tags to the set
+      tags.forEach((tag) => allTags.add(tag));
+
+      return {
+        ...item,
+        dietary_tags: tags,
+      };
+    });
+
+    // Convert Set to array and sort alphabetically
+    const uniqueTags = Array.from(allTags).sort();
+    setActiveTags(uniqueTags);
+
+    return processedItems;
+  };
 
   const fetchItems = async (category) => {
     setLoading(true);
@@ -33,7 +60,8 @@ const MenuPage = () => {
           ? await menuApi.getAll()
           : await menuApi.getByCategory(category);
 
-      setMenuItems(items);
+      const processedItems = processMenuItems(items);
+      setMenuItems(processedItems);
     } catch (err) {
       console.error("Error fetching menu items:", err);
       setError("Failed to load menu items. Please try again later.");
@@ -48,25 +76,27 @@ const MenuPage = () => {
 
   const handleCategoryChange = (categoryId) => {
     if (categoryId === "all") {
-      navigate("/menu"); // Navigate to base menu route for "All"
+      navigate("/menu");
     } else {
       navigate(`/menu/category/${categoryId}`);
     }
   };
 
   return (
-    <div className="bg-[#f6ad55]/30 min-h-screen pb-20">
+    <div className="bg-[#f6ad55]/30 min-h-screen pb-20 ">
       <div className="max-w-6xl mx-auto px-4 py-10">
         <header className="mb-10">
-          <h1 className="text-4xl font-bold mb-2 text-gray-900">Our Menu</h1>
+          <h1 className="text-4xl font-playfair font-bold mb-2 text-gray-900 mt-20">
+            Our Menu
+          </h1>
           <p className="text-gray-700 text-lg">
-            “See what's cooking. Explore our freshly made dishes before your
-            visit.”
+            "See what's cooking. Explore our freshly made dishes before your
+            visit."
           </p>
         </header>
 
         {/* Category Filters */}
-        <div className="flex flex-wrap gap-3 mb-10">
+        <div className="flex flex-wrap gap-3 mb-6">
           {CATEGORIES.map((category) => (
             <button
               key={category.id}

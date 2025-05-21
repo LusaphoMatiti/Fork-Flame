@@ -8,8 +8,8 @@ const CATEGORIES = [
   { id: "all", name: "All" },
   { id: "starters", name: "Starters" },
   { id: "seafood", name: "Seafood" },
-  { id: "meat & game", name: "Meat & Game" },
-  { id: "vegetarian & vegan", name: "Vegetarian & Vegan" },
+  { id: "meat-and-game", name: "Meat & Game" },
+  { id: "vegetarian-and-vegan", name: "Vegetarian & Vegan" },
   { id: "desserts", name: "Desserts" },
 ];
 

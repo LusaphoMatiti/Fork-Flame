@@ -2,7 +2,7 @@ import BookingForm from "./BookingForm";
 
 const Hero = () => {
   return (
-    <section className="h-screen relative overflow-hidden">
+    <section className="h-screen relative overflow-hidden" id="home">
       <video
         autoPlay
         muted
@@ -12,7 +12,7 @@ const Hero = () => {
         <source src="/hero-video.mp4" type="video/mp4" />
       </video>
       {/* Overlay */}
-      <div className="absolute inset-0 bg-black opacity-60 z-10"></div>
+      <div className="absolute inset-0 bg-black opacity-50 z-10"></div>
       {/* Content */}
       <div className="relative z-20 flex flex-col items-center justify-center h-full text-white px-6   text-center">
         <h1 className="text-4xl md:text-6xl pt-15   mb-4 font-playfair">

@@ -25,6 +25,8 @@ function App() {
           }
         />
         <Route path="/menu" element={<Menu />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/home" element={<Hero />} />
         <Route path="/menu/category/:categoryId" element={<CategoryPage />} />
       </Routes>
       <Footer />

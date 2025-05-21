@@ -8,11 +8,11 @@ const MenuTeaser = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-6 p-6">
           {[
-            { name: "Peri Peri Prawns", img: "/cuisine-1.jpg" },
-            { name: "Peri Peri Prawns", img: "/cuisine-5.jpg" },
-            { name: "Braaied Snoek", img: "/cuisine-2.jpg" },
-            { name: "Roasted Salmon", img: "/cuisine-3.jpg" },
-            { name: "Seared Tuna Steaks", img: "/cuisine-4.jpg" },
+            { name: "Peri Peri Prawns", img: "./Seafood/cuisine-1.jpg" },
+            { name: "Chicken Fajitas", img: "./Seafood/cuisine-5.jpg" },
+            { name: "Braaied Snoek", img: "./Seafood/cuisine-2.jpg" },
+            { name: "Roasted Salmon", img: "./Seafood/cuisine-3.jpg" },
+            { name: "Seared Tuna Steaks", img: "./Seafood/cuisine-4.jpg" },
           ].map((dish, index) => (
             <div key={index} className="flex flex-col items-center">
               <img

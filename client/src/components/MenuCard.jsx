@@ -1,4 +1,16 @@
 const MenuCard = ({ item }) => {
+  // Define tag styles
+  const tagStyles = {
+    vegetarian: "bg-green-100 text-green-800",
+    vegan: "bg-emerald-100 text-emerald-800",
+    "gluten-free": "bg-amber-100 text-amber-800",
+    spicy: "bg-red-100 text-red-800",
+    // Add more tags as needed
+  };
+
+  // Get unique tags and filter out empty/null
+  const tags = [...new Set(item.dietary_tags || [])].filter(Boolean);
+
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
       {/* Image Section */}
@@ -32,17 +44,24 @@ const MenuCard = ({ item }) => {
             "A flavorful dish prepared with fresh ingredients and chef's special recipe."}
         </p>
 
-        {/* Dietary Tags */}
-        <div className="flex flex-wrap gap-2">
-          {["Vegetarian", "Gluten-Free"].map((tag) => (
-            <span
-              key={tag}
-              className="bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded"
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
+        {/* Dietary Tags - Now Dynamic */}
+        {tags.length > 0 && (
+          <div className="flex flex-wrap gap-2">
+            {tags.map((tag) => (
+              <span
+                key={tag}
+                className={`text-xs px-2 py-1 rounded ${
+                  tagStyles[tag] || "bg-gray-100 text-gray-800"
+                }`}
+              >
+                {tag
+                  .split("-")
+                  .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                  .join(" ")}
+              </span>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

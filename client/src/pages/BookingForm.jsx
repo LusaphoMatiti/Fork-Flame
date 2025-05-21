@@ -52,69 +52,77 @@ const BookingForm = () => {
   if (isMobile) {
     return (
       <form
-        className="flex flex-col gap-4 px-4 py-3 bg-white rounded-lg shadow-md max-w-xs mx-auto w-full"
+        className="flex flex-col gap-5 px-5 py-4 bg-white rounded-xl shadow-lg max-w-md mx-auto w-full"
         onSubmit={handleSubmit}
       >
         {/* Guests Input */}
-        <div className="flex flex-col">
-          <label className="text-sm text-gray-500 mb-1">People</label>
+        <div className="flex flex-col gap-1">
+          <label className="text-sm font-medium text-gray-600">
+            Number of Guests
+          </label>
           <input
             type="number"
             name="guests"
             min="1"
-            placeholder=""
+            placeholder="2"
             value={formData.guests}
             onChange={handleChange}
-            className=" border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-amber-500 placeholder:text-gray-400 w-16"
+            className="border border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-300 placeholder:text-gray-400 bg-gray-50 text-gray-800 w-full"
           />
         </div>
 
         {/* Customer Name */}
-        <div className="flex flex-col">
-          <label className="text-sm text-gray-500 mb-1">Name</label>
+        <div className="flex flex-col gap-1">
+          <label className="text-sm font-medium text-gray-600">Your Name</label>
           <input
             type="text"
             name="name"
-            placeholder="Name"
+            placeholder="Full name"
             value={formData.name}
             onChange={handleChange}
-            className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-amber-500 w-16"
+            className="border border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-300 placeholder:text-gray-400 bg-gray-50 text-gray-800 w-full"
           />
         </div>
 
-        {/* Booking Date */}
-        <div className="flex flex-col">
-          <label className="text-sm text-gray-500 mb-1">Date</label>
-          <input
-            type="date"
-            name="date"
-            value={formData.date}
-            onChange={handleChange}
-            className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-amber-500 w-16"
-          />
-        </div>
+        {/* Date & Time Row */}
+        <div className="grid grid-cols-2 gap-4">
+          {/* Booking Date */}
+          <div className="flex flex-col gap-1">
+            <label className="text-sm font-medium text-gray-600">Date</label>
+            <input
+              type="date"
+              name="date"
+              value={formData.date}
+              onChange={handleChange}
+              className="border border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-300 bg-gray-50 text-gray-800 w-full"
+            />
+          </div>
 
-        {/* Booking Time */}
-        <div className="flex flex-col">
-          <label className="text-sm text-gray-500 mb-1">Time</label>
-          <input
-            type="time"
-            name="time"
-            value={formData.time}
-            onChange={handleChange}
-            className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-amber-500 w-16"
-          />
+          {/* Booking Time */}
+          <div className="flex flex-col gap-1">
+            <label className="text-sm font-medium text-gray-600">Time</label>
+            <input
+              type="time"
+              name="time"
+              value={formData.time}
+              onChange={handleChange}
+              className="border border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-300 bg-gray-50 text-gray-800 w-full"
+            />
+          </div>
         </div>
 
         {/* Submit Button */}
         <button
           type="submit"
-          className="bg-amber-600 hover:bg-amber-700 text-white py-2 px-4 rounded text-lg font-semibold transition duration-300 mt-2"
+          className="bg-amber-500 hover:bg-amber-600 text-white py-3 px-6 rounded-lg text-lg font-semibold transition-colors duration-300 mt-4 cursor-pointer shadow-md hover:shadow-lg active:scale-[0.98]"
         >
           Book a Table
         </button>
+
         {status && (
-          <p className="text-center text-sm mt-2 text-gray-600">{status}</p>
+          <p className="text-center text-sm mt-3 text-gray-600 font-medium">
+            {status}
+          </p>
         )}
       </form>
     );
@@ -123,69 +131,80 @@ const BookingForm = () => {
   // Desktop Form Layout
   return (
     <form
-      className="flex flex-row flex-wrap items-center justify-center gap-6 px-6 py-3 bg-white rounded-full shadow-md max-w-5xl mx-auto"
+      className="flex flex-row items-center justify-center bg-white rounded-full shadow-lg max-w-5xl mx-auto px-8 py-3"
       onSubmit={handleSubmit}
     >
       {/* Guests Input */}
-      <div className="flex items-center w-auto border-r border-gray-300 pr-4">
-        <span className="text-gray-500 mr-2 whitespace-nowrap">People</span>
+      <div className="flex items-center border-r border-gray-200 pr-6 h-12">
+        <span className="text-gray-600 mr-3 whitespace-nowrap font-medium">
+          Guests
+        </span>
         <input
           type="number"
           name="guests"
           min="1"
           placeholder="2"
-          className="w-24 text-center border-none focus:ring-0 p-0 text-lg border border-red-500 placeholder:text-gray-600 bg-black"
+          className="w-20 text-center border-none focus:ring-2 focus:ring-amber-300 p-0 text-lg placeholder:text-gray-400 bg-gray-50 text-gray-800 rounded-lg px-3 py-2 h-full"
           value={formData.guests}
           onChange={handleChange}
         />
       </div>
 
       {/* Customer Name */}
-      <div className="flex items-center w-auto border-r border-gray-300 pr-4">
-        <span className="text-gray-500 mr-2 whitespace-nowrap">Name</span>
+      <div className="flex items-center border-r border-gray-200 pr-6 h-12 ml-2">
+        <span className="text-gray-600 mr-3 whitespace-nowrap font-medium">
+          Name
+        </span>
         <input
           type="text"
           name="name"
-          placeholder="Name"
-          className="w-24 border-none focus:ring-0 p-0 text-lg placeholder:text-gray-600 bg-black"
+          placeholder="Your name"
+          className="w-32 border-none focus:ring-2 focus:ring-amber-300 p-0 text-lg placeholder:text-gray-400 bg-gray-50 text-gray-800 rounded-lg px-3 py-2 h-full"
           value={formData.name}
           onChange={handleChange}
         />
       </div>
 
       {/* Booking Date */}
-      <div className="flex items-center w-auto border-r border-gray-300 pr-4">
-        <span className="text-gray-500 mr-2 whitespace-nowrap">Date</span>
+      <div className="flex items-center border-r border-gray-200 pr-6 h-12 ml-2">
+        <span className="text-gray-600 mr-3 whitespace-nowrap font-medium">
+          Date
+        </span>
         <input
           type="date"
           name="date"
-          className="w-24 border-none focus:ring-0 p-0 text-lg placeholder:text-gray-600 bg-black"
+          className="w-28 border-none focus:ring-2 focus:ring-amber-300 p-0 text-lg placeholder:text-gray-400 bg-gray-50 text-gray-800 rounded-lg px-3 py-2 h-full"
           value={formData.date}
           onChange={handleChange}
         />
       </div>
 
       {/* Booking Time */}
-      <div className="flex items-center w-auto pr-4">
-        <span className="text-gray-500 mr-2 whitespace-nowrap">Time</span>
+      <div className="flex items-center h-12 ml-2">
+        <span className="text-gray-600 mr-3 whitespace-nowrap font-medium">
+          Time
+        </span>
         <input
           type="time"
           name="time"
-          className="w-24 border-none focus:ring-0 p-0 text-lg placeholder:text-gray-600 bg-black"
+          className="w-24 border-none focus:ring-2 focus:ring-amber-300 p-0 text-lg placeholder:text-gray-400 bg-gray-50 text-gray-800 rounded-lg px-3 py-2 h-full"
           value={formData.time}
           onChange={handleChange}
         />
       </div>
 
-      {/* Submit Button */}
+      {/* Submit Button - Now perfectly aligned */}
       <button
         type="submit"
-        className="bg-amber-600 hover:bg-amber-700 text-white py-2 sm:py-3 px-6 sm:px-8 rounded-full text-lg font-semibold transition duration-300 self-center whitespace-nowrap"
+        className="bg-amber-500 hover:bg-amber-600 text-white text-lg font-semibold transition-colors duration-300 whitespace-nowrap shadow-md hover:shadow-lg rounded-full h-12 px-8 ml-6"
       >
         Book a Table
       </button>
+
       {status && (
-        <p className="text-center text-sm mt-2 text-gray-600">{status}</p>
+        <p className="absolute -bottom-6 left-0 right-0 text-center text-sm text-gray-600 font-medium">
+          {status}
+        </p>
       )}
     </form>
   );
