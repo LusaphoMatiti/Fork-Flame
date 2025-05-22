@@ -36,11 +36,10 @@ const limiter = rateLimit({
 // Middleware
 app.use(
   cors({
-    origin:
-      process.env.NODE_ENV === "production"
-        ? [process.env.FRONTEND_URL]
-        : [process.env.FRONTEND_URL, "http://localhost:5173"],
+    origin: ["https://fork-flame.vercel.app", "http://localhost:5173"],
+    methods: "GET,POST,PUT,DELETE",
     credentials: true,
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
