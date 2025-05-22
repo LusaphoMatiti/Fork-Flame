@@ -4,7 +4,7 @@ const Contact = () => {
       className="flex items-center justify-center bg-[#F4EFEA] py-10 px-4 sm:px-6 lg:py-20"
       id="contact"
     >
-      <div className="flex flex-col lg:flex-row justify-center items-center w-full max-w-7xl gap-12">
+      <div className="flex flex-col lg:flex-row justify-center items-center w-full max-w-7xl gap-12 sm:mt-20">
         {/* Image Section */}
         <div className="w-full max-w-md lg:max-w-xl">
           <img

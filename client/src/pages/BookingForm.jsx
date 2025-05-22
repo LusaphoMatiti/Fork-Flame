@@ -42,9 +42,16 @@ const BookingForm = () => {
         date: "",
         time: "",
       });
+      setTimeout(() => {
+        setStatus("");
+      }, 5000);
     } catch (error) {
       console.error("Booking error:", error);
       setStatus("Booking failed. Try again.");
+
+      setTimeout(() => {
+        setStatus("");
+      }, 5000);
     }
   };
 
@@ -130,83 +137,95 @@ const BookingForm = () => {
 
   // Desktop Form Layout
   return (
-    <form
-      className="flex flex-row items-center justify-center bg-white rounded-full shadow-lg max-w-5xl mx-auto px-8 py-3"
-      onSubmit={handleSubmit}
-    >
-      {/* Guests Input */}
-      <div className="flex items-center border-r border-gray-200 pr-6 h-12">
-        <span className="text-gray-600 mr-3 whitespace-nowrap font-medium">
-          Guests
-        </span>
-        <input
-          type="number"
-          name="guests"
-          min="1"
-          placeholder="2"
-          className="w-20 text-center border-none focus:ring-2 focus:ring-amber-300 p-0 text-lg placeholder:text-gray-400 bg-gray-50 text-gray-800 rounded-lg px-3 py-2 h-full"
-          value={formData.guests}
-          onChange={handleChange}
-        />
-      </div>
-
-      {/* Customer Name */}
-      <div className="flex items-center border-r border-gray-200 pr-6 h-12 ml-2">
-        <span className="text-gray-600 mr-3 whitespace-nowrap font-medium">
-          Name
-        </span>
-        <input
-          type="text"
-          name="name"
-          placeholder="Your name"
-          className="w-32 border-none focus:ring-2 focus:ring-amber-300 p-0 text-lg placeholder:text-gray-400 bg-gray-50 text-gray-800 rounded-lg px-3 py-2 h-full"
-          value={formData.name}
-          onChange={handleChange}
-        />
-      </div>
-
-      {/* Booking Date */}
-      <div className="flex items-center border-r border-gray-200 pr-6 h-12 ml-2">
-        <span className="text-gray-600 mr-3 whitespace-nowrap font-medium">
-          Date
-        </span>
-        <input
-          type="date"
-          name="date"
-          className="w-28 border-none focus:ring-2 focus:ring-amber-300 p-0 text-lg placeholder:text-gray-400 bg-gray-50 text-gray-800 rounded-lg px-3 py-2 h-full"
-          value={formData.date}
-          onChange={handleChange}
-        />
-      </div>
-
-      {/* Booking Time */}
-      <div className="flex items-center h-12 ml-2">
-        <span className="text-gray-600 mr-3 whitespace-nowrap font-medium">
-          Time
-        </span>
-        <input
-          type="time"
-          name="time"
-          className="w-24 border-none focus:ring-2 focus:ring-amber-300 p-0 text-lg placeholder:text-gray-400 bg-gray-50 text-gray-800 rounded-lg px-3 py-2 h-full"
-          value={formData.time}
-          onChange={handleChange}
-        />
-      </div>
-
-      {/* Submit Button - Now perfectly aligned */}
-      <button
-        type="submit"
-        className="bg-amber-500 hover:bg-amber-600 text-white text-lg font-semibold transition-colors duration-300 whitespace-nowrap shadow-md hover:shadow-lg rounded-full h-12 px-8 ml-6"
+    <div className="relative">
+      <form
+        className="flex flex-row items-center justify-center bg-white rounded-full shadow-lg max-w-5xl mx-auto px-8 py-3"
+        onSubmit={handleSubmit}
       >
-        Book a Table
-      </button>
+        {/* Guests Input */}
+        <div className="flex items-center border-r border-gray-200 pr-6 h-12">
+          <span className="text-gray-600 mr-3 whitespace-nowrap font-medium">
+            Guests
+          </span>
+          <input
+            type="number"
+            name="guests"
+            min="1"
+            placeholder="2"
+            className="w-20 text-center border-none focus:ring-2 focus:ring-amber-300 p-0 text-lg placeholder:text-gray-400 bg-gray-50 text-gray-800 rounded-lg px-3 py-2 h-full"
+            value={formData.guests}
+            onChange={handleChange}
+          />
+        </div>
 
-      {status && (
-        <p className="absolute -bottom-6 left-0 right-0 text-center text-sm text-gray-600 font-medium">
-          {status}
-        </p>
-      )}
-    </form>
+        {/* Customer Name */}
+        <div className="flex items-center border-r border-gray-200 pr-6 h-12 ml-2">
+          <span className="text-gray-600 mr-3 whitespace-nowrap font-medium">
+            Name
+          </span>
+          <input
+            type="text"
+            name="name"
+            placeholder="Your name"
+            className="w-32 border-none focus:ring-2 focus:ring-amber-300 p-0 text-lg placeholder:text-gray-400 bg-gray-50 text-gray-800 rounded-lg px-3 py-2 h-full"
+            value={formData.name}
+            onChange={handleChange}
+          />
+        </div>
+
+        {/* Booking Date */}
+        <div className="flex items-center border-r border-gray-200 pr-6 h-12 ml-2">
+          <span className="text-gray-600 mr-3 whitespace-nowrap font-medium">
+            Date
+          </span>
+          <input
+            type="date"
+            name="date"
+            className="w-28 border-none focus:ring-2 focus:ring-amber-300 p-0 text-lg placeholder:text-gray-400 bg-gray-50 text-gray-800 rounded-lg px-3 py-2 h-full"
+            value={formData.date}
+            onChange={handleChange}
+          />
+        </div>
+
+        {/* Booking Time */}
+        <div className="flex items-center h-12 ml-2">
+          <span className="text-gray-600 mr-3 whitespace-nowrap font-medium">
+            Time
+          </span>
+          <input
+            type="time"
+            name="time"
+            className="w-24 border-none focus:ring-2 focus:ring-amber-300 p-0 text-lg placeholder:text-gray-400 bg-gray-50 text-gray-800 rounded-lg px-3 py-2 h-full"
+            value={formData.time}
+            onChange={handleChange}
+          />
+        </div>
+
+        {/* Submit Button - Now perfectly aligned */}
+        <button
+          type="submit"
+          className="bg-amber-500 hover:bg-amber-600 text-white text-lg font-semibold transition-colors duration-300 whitespace-nowrap shadow-md hover:shadow-lg rounded-full h-12 px-8 ml-6"
+        >
+          Book a Table
+        </button>
+
+        {status && (
+          <div
+            className={`
+    fixed bottom-6 left-1/2 transform -translate-x-1/2
+    px-6 py-3 rounded-lg shadow-lg z-50
+    ${
+      status.includes("Successful")
+        ? "bg-green-100 text-green-800 border border-green-300"
+        : "bg-red-100 text-red-800 border border-red-300"
+    }
+  `}
+          >
+            <p className="font-medium text-center">{status}</p>
+          </div>
+        )}
+      </form>
+    </div>
   );
 };
 
