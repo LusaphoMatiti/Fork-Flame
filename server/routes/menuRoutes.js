@@ -15,8 +15,8 @@ router.get("/", async (req, res) => {
   try {
     const { data, error } = await supabase.from("menu_items").select(`
         *,
-        categories (
-          id,
+        categories!inner (
+          category_id,
           category_name
         )
       `);
@@ -26,29 +26,29 @@ router.get("/", async (req, res) => {
       return res.status(500).json({ message: "Error fetching menu items." });
     }
 
-    // Transform dietary_tags to ensure it's always an array
+    // Transform and flatten the data
     const transformedData = data.map((item) => ({
       ...item,
       dietary_tags: ensureArray(item.dietary_tags),
-      // Flatten the category relationship
-      category_id: item.categories.id,
+      // Access category_id from the relationship
+      category_id: item.categories.category_id,
       category_name: item.categories.category_name,
     }));
 
     res.json(transformedData);
   } catch (err) {
     console.error("Unexpected error:", err);
-    res.status(500).json({ message: "Unexpected server error." });
+    res.status(500).json({
+      message: "Unexpected server error.",
+      error: process.env.NODE_ENV === "development" ? err.message : undefined,
+    });
   }
 });
 
 // GET items by category name
 router.get("/category/:category_name", async (req, res) => {
-  const { category_name } = req.params;
-
   try {
-    // Decode URI component (handles spaces encoded as %20)
-    const decodedName = decodeURIComponent(category_name);
+    const decodedName = decodeURIComponent(req.params.category_name);
 
     const { data: menuItems, error } = await supabase
       .from("menu_items")
@@ -56,7 +56,7 @@ router.get("/category/:category_name", async (req, res) => {
         `
         *,
         categories!inner (
-          id,
+          category_id,
           category_name
         )
       `
@@ -65,18 +65,20 @@ router.get("/category/:category_name", async (req, res) => {
 
     if (error) throw error;
 
-    // Transform dietary_tags and flatten category
     const transformedItems = menuItems.map((item) => ({
       ...item,
       dietary_tags: ensureArray(item.dietary_tags),
-      category_id: item.categories.id,
+      category_id: item.categories.category_id,
       category_name: item.categories.category_name,
     }));
 
     res.json(transformedItems);
   } catch (err) {
     console.error("Category items error:", err);
-    res.status(500).json({ message: "Error fetching category items" });
+    res.status(500).json({
+      message: "Error fetching category items",
+      error: process.env.NODE_ENV === "development" ? err.message : undefined,
+    });
   }
 });
 
